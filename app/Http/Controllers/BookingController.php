@@ -14,9 +14,9 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $bookings = $user->bookings()->with('flight')->get();
-        return view('bookingsView', compact('bookings'));
+        $booking = Booking::all();
+        /* $booking = Booking::where('user_id', )->get(); */
+        return view('bookingsView', compact('booking'));
     }
 /*     public function edit(Booking $booking)
     {

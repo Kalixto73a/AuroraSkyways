@@ -48,9 +48,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function bookings(): HasMany
+    public function fligts()
     {
-        return $this->hasMany(Booking::class, 'user_id');
+        return $this->belongsToMany(Flight::class)
+            ->using(Booking::class)
+            ->withPivot('name','email','email_verified_at','password','role',)
+            ->withTimestamps();
     }
 }
 
