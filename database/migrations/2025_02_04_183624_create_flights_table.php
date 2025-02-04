@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->dateTime('departure_date');
             $table->dateTime('arrival_date');
-            $table->varchar('origin');
-            $table->varchar('destination');
-            $table->unsignedBigInteger('airplane_id'); 
+            $table->string('origin');
+            $table->string('destination');
+            $table->string('airplane_id'); 
             $table->boolean('available')->default(true);
             $table->timestamps();
-            $table->foreign('airplane_id')->references('id')->on('airplanes')->onDelete('null');
+            /* $table->foreign('airplane_id')->references('id')->on('airplanes')->onDelete('null'); */
         });
     }
 

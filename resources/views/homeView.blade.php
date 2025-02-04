@@ -7,7 +7,7 @@
       class="absolute inset-0 w-full h-full object-cover opacity-50"
     />
     <h1 class="text-white text-4xl font-bold font-[K2D] z-10 uppercase">
-      Biennvenido a AuroraSkyways
+      Bienvenido a AuroraSkyways
     </h1>
-  </div>
+</div>
 @endsection

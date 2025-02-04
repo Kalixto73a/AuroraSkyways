@@ -8,7 +8,7 @@
     @vite(['resources/css/app.css'])
     <link rel="stylesheet" href="{{ asset('css/app.css')}}">
 </head>
-<body class="w-full">
+<body class="w-full no-scrollbar">
     <div>
         <x-header />
 
