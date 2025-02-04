@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('flights', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('departure_date');
-            $table->dateTime('arrival_date');
+            $table->dateTime('departure_date')->format('d/m/Y H:i') ;
+            $table->dateTime('arrival_date')->format('d/m/Y H:i') ;
             $table->string('origin');
             $table->string('destination');
             $table->string('airplane_id'); 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('flight_id');
             $table->bigInteger('seat_number');
-            $table->enum('status' , ['Active','Inactive'])->default('Active');
+            $table->enum('status' , ['Activo','Inactivo'])->default('Activo');
             $table->timestamps();
             $table->foreign('user_id')
                   ->references('id')

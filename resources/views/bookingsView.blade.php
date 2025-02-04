@@ -13,13 +13,13 @@
       <!-- Encabezado -->
       <div class="flex justify-between items-center bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-t-xl p-4 sticky top-0">
         <button class="bg-white text-cyan-500 font-bold py-2 px-4 rounded-full shadow-md hover:scale-110 transition transition-transform duration-500">Actuales</button>
-        <h1 class="text-2xl font-bold">VUELOS</h1>
+        <h1 class="text-2xl font-bold">MIS RESERVAS</h1>
         <button class="bg-white text-cyan-500 font-bold py-2 px-4 rounded-full shadow-md hover:scale-110 transition transition-transform duration-500">Antiguos</button>
       </div>
   
-      <!-- Lista de vuelos -->
+      <!-- Lista de reservas -->
       <div class="p-4 space-y-4">
-        @foreach ($flights as $flight)
+        @foreach ($bookings as $booking)
         <div class="flex items-center justify-between bg-white rounded-lg shadow-md p-4">
           <!-- Icono -->
           <div class="flex items-center space-x-4">
@@ -29,29 +29,29 @@
               </svg>
             </div>
             <div>
-              <p class="text-sm font-bold">IDA: {{$flight->departure_date}}</p>
-              <p class="text-sm font-bold">VUELTA: {{$flight->arrival_date}}</p>
-              <p class="text-sm">ORIGEN: {{$flight->origin}}</p>
+              <p class="text-sm font-bold">IDA: {{ $booking->flight->departure_date }}</p>
+              <p class="text-sm font-bold">VUELTA: {{ $booking->flight->arrival_date }}</p>
+              <p class="text-sm">ORIGEN: {{ $booking->flight->origin }}</p>
             </div>
           </div>
   
           <!-- Información del vuelo -->
           <div>
-            <p class="text-sm font-bold">CAPACIDAD TOTAL: {{-- {{$flight->capacity}} --}} 150</p>
-            <p class="text-sm font-bold">CAPACIDAD RESTANTE: {{-- {{$flight->remaining_capacity}} --}}30</p>
-            <p class="text-sm">DESTINO: {{$flight->destination}}</p>
+            <p class="text-sm font-bold">ASIENTO: {{ $booking->seat_number }}</p>
+            <p class="text-sm font-bold">ESTADO: {{ $booking->status }}</p>
+            <p class="text-sm">DESTINO: {{ $booking->flight->destination }}</p>
           </div>
   
-          <!-- Botón reservar -->
+          <!-- Botón cancelar -->
           <div class="flex flex-col items-center text-sm font-bold">
-            <p class="pb-2">Avion Asignado: {{-- {{$flight->airplane}} --}}A-500</p>
-            <button class="bg-cyan-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-cyan-600">
-              Reservar
+            <p class="pb-2">Avión Asignado: A-500{{-- {{ $booking->flight->airplane->name }} --}}</p>
+            <button class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600">
+              Cancelar
             </button>
           </div>
         </div>
         @endforeach
       </div>
     </div>
-  </div>  
+</div>
 @endsection

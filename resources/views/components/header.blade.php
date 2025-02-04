@@ -1,7 +1,7 @@
 <header class="flex items-center justify-between bg-[#446878] text-white p-4 font-[K2D]">
   <!-- Botón de Reservas -->
   <button class="ml-8 bg-[#53CCDC] px-4 py-2 rounded-full text-lg w-[111px] text-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
-    Reservas
+    <a href="{{route('bookings')}}">Reservas</a>
   </button>
   
   <!-- Título del header -->

@@ -16,24 +16,32 @@ class BookingSeeder extends Seeder
     {
         $bookings = [
             [
+                'user_id' => 1,
+                'flight_id' => 1,
                 'seat_number' => 12,
                 'status' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
+                'user_id' => 4,
+                'flight_id' => 1,
                 'seat_number' => 15,
                 'status' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
+                'user_id' => 3,
+                'flight_id' => 1,
                 'seat_number' => 5,
                 'status' => 'Inactive',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
+                'user_id' => 2,
+                'flight_id' => 1,
                 'seat_number' => 20,
                 'status' => 'Active',
                 'created_at' => now(),
