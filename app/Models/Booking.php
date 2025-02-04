@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Pivot
 {
-    protected $table = 'bookings';
+    /* protected $table = 'bookings';
     protected $fillable = [
         'user_id',
         'flight_id',
@@ -22,5 +22,5 @@ class Booking extends Pivot
     public function flight()
     {
         return $this->belongsTo(Flight::class, 'flight_id');
-    }
+    } */
 }

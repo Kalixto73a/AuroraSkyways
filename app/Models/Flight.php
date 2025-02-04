@@ -19,11 +19,11 @@ class Flight extends Model
     {
         return $this->belongsTo(Airplane::class, 'airplane_id');
     } */
-    public function users()
+    /* public function users()
     {
         return $this->belongsToMany(User::class)
             ->withPivot('departure_date', 'arrival_date','origin','destination','available')
             ->using(Booking::class)
             ->withTimestamps();
-    }
+    } */
 }

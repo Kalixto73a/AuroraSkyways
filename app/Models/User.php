@@ -48,12 +48,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function fligts()
+    /* public function fligts()
     {
         return $this->belongsToMany(Flight::class)
             ->using(Booking::class)
             ->withPivot('name','email','email_verified_at','password','role',)
             ->withTimestamps();
-    }
+    } */
 }
 

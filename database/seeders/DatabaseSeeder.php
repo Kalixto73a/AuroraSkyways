@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call([
             FlightSeeder::class,
-            BookingSeeder::class,
+            /* BookingSeeder::class, */
         ]);
     }
 }

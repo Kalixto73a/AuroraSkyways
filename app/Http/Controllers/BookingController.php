@@ -9,25 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    /* public function index()
     {
         $bookings = Booking::all();
-        /* $booking = Booking::where('user_id', )->get(); */
+        $booking = Booking::where('user_id', )->get();
         return view('bookingsView', compact('bookings'));
-    }
-/*     public function edit(Booking $booking)
-    {
-        //
-    }
-    public function update(Request $request, Booking $booking)
-    {
-        //
-    }
-    public function destroy(Booking $booking)
-    {
-        //
     } */
 }
