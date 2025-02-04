@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -12,7 +14,8 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::all();
+        $user = Auth::user();
+        $bookings = $user->bookings()->with('flight')->get();
         return view('bookingsView', compact('bookings'));
     }
 /*     public function edit(Booking $booking)

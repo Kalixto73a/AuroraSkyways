@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->unsigned();
-            $table->unsignedBigInteger('flight_id')->unsigned();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('flight_id');
             $table->bigInteger('seat_number');
             $table->enum('status' , ['Active','Inactive'])->default('Active');
             $table->timestamps();
