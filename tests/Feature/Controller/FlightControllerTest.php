@@ -11,12 +11,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class FlightControllerTest extends TestCase
 {
     use RefreshDatabase;
-    public function testItDisplaysTheFlightViewWithAllFlights(): void
+    public function testItDisplaysTheFlightViewWithAllFlights()
     {
         $this->seed(DatabaseSeeder::class);
         $response = $this->get(route('flights'));
-        $response->assertStatus(200);
-        $response->assertViewIs('flightsView');
-        $response->assertViewHas('flights', Flight::all());
+        $response->assertStatus(200)
+                 ->assertViewIs('flightsView')
+                 ->assertViewHas('flights', Flight::all());
     }
 }
