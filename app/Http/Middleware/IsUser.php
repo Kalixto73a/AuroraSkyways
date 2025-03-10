@@ -19,7 +19,7 @@ class IsUser
             return $next($request);
         }
         else {
-            return response()->json(['error' => 'No autorizado'], 401);
+            return redirect()->route('home');
         }
     }
 }
