@@ -1,13 +1,17 @@
 <header class="flex items-center justify-between bg-[#446878] text-white p-4 font-[K2D]">
   <!-- Botón de Reservas -->
   @if (request()->routeIs('bookings'))
-    <button class="ml-8 bg-[#53CCDC] px-4 py-2 rounded-full text-lg w-[111px] text-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
-        <a href="{{route('home')}}">Inicio</a>
-    </button>
+    <a href="{{route('home')}}">
+      <button class="ml-8 bg-[#53CCDC] px-4 py-2 rounded-full text-lg w-[111px] text-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
+        <div>Inicio</div>
+      </button>
+    </a>
   @else
-    <button class="ml-8 bg-[#53CCDC] px-4 py-2 rounded-full text-lg w-[111px] text-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
-        <a href="{{route('bookings')}}">Reservas</a>
-    </button>
+    <a href="{{route('bookings')}}">
+      <button class="ml-8 bg-[#53CCDC] px-4 py-2 rounded-full text-lg w-[111px] text-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
+        <div>Reservas</div>
+      </button>
+    </a>
   @endif
   <!-- Título del header -->
   <div class="text-2xl font-bold ml-8">AuroraSkyways</div>
@@ -16,13 +20,17 @@
   <div class="flex items-center gap-4">
     <!-- Botón de Vuelos -->
     @if (request()->routeIs('flights'))
-    <button class="bg-[#53CCDC] px-4 py-2 rounded-full text-lg w-[111px] text-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
-        <a href="{{route('home')}}">Inicio</a>
-    </button>
+      <a href="{{route('home')}}">
+        <button class="ml-8 bg-[#53CCDC] px-4 py-2 rounded-full text-lg w-[111px] text-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
+          <div>Inicio</div>
+        </button>
+      </a>
     @else
-    <button class="bg-[#53CCDC] px-4 py-2 rounded-full text-lg w-[111px] text-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
-        <a href="{{route('flights')}}">Vuelos</a>
-    </button>
+      <a href="{{route('flights')}}">
+        <button class="ml-8 bg-[#53CCDC] px-4 py-2 rounded-full text-lg w-[111px] text-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
+          <div>Vuelos</div>
+        </button>
+      </a>
     @endif
     <!-- Botón de Usuario -->
     <button class="mr-4 bg-white rounded-full w-9 h-9 flex items-center justify-center font-bold shadow-md hover:scale-110 transition transition-transform duration-500">
