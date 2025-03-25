@@ -3,27 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Flight extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'departure_date',
         'arrival_date',
         'origin',
         'destination',
-        'airplane_id',
+        'plane_id',
         'available'
     ];
 
-    /* public function airplane()
+
+    public function bookings()
     {
-        return $this->belongsTo(Airplane::class, 'airplane_id');
-    } */
-    /* public function users()
-    {
-        return $this->belongsToMany(User::class)
-            ->withPivot('departure_date', 'arrival_date','origin','destination','available')
-            ->using(Booking::class)
-            ->withTimestamps();
-    } */
+        return $this->hasMany(Booking::class, 'flight_id');
+    }
 }

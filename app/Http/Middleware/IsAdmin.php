@@ -16,7 +16,7 @@ class IsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         $user = auth('api')->user();
-        if($user && $user->role == 'admin'){
+        if($user && $user->role === 'admin'){
             return $next($request);
         }
         else {

@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    /* public function index()
+    public function index()
     {
         $bookings = Booking::all();
-        $booking = Booking::where('user_id', )->get();
+        $booking = Booking::where('user_id')->get();
         return view('bookingsView', compact('bookings'));
-    } */
+    }
 }

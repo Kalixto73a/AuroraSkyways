@@ -20,7 +20,7 @@ class FlightModelsTest extends TestCase
             'arrival_date' => now()->addHours(2),
             'origin' => 'New York',
             'destination' => 'Los Angeles',
-            'airplane_id' => 1,
+            'plane_id' => 1,
             'available' => true,
         ]);
 

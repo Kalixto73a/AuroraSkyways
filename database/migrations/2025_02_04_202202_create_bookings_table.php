@@ -13,19 +13,16 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('flight_id');
-            $table->bigInteger('seat_number');
-            $table->enum('status' , ['Activo','Inactivo'])->default('Activo');
+    
+            // Relaciones (asegúrate que sean consistentes)
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('flight_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('plane_id')->constrained()->cascadeOnDelete(); // Campo requerido
+            
+            $table->string('seat_number');
+            $table->enum('status', ['Activo', 'Inactivo'])->default('Activo');
             $table->timestamps();
-            $table->foreign('user_id')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('cascade');
-            $table->foreign('flight_id')
-                  ->references('id')
-                  ->on('flights')
-                  ->onDelete('cascade');
+            
             $table->unique(['user_id', 'flight_id']);
         });
     }

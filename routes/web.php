@@ -8,11 +8,14 @@ use App\Http\Controllers\SingInController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeViewController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PlanesController;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 Route::get('/',[HomeViewController::class, 'index'])->name('home');
 Route::get('/flights', [FlightController::class, 'index'])->name('flights');
+Route::get('/planes', [PlanesController::class, 'index'])->name('planes')->middleware('auth');
 Route::get('/bookings', [BookingController::class, 'index'])->name('bookings')->middleware('auth');
+
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::get('/register',[SingInController::class, 'showRegisterForm'])->name('register');

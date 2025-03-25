@@ -26,7 +26,7 @@ class FlightSeeder extends Seeder
                 'arrival_date' => Carbon::now()->addDays(1)->addHours(5)->toDateTimeString(),
                 'origin' => 'Madrid',
                 'destination' => 'París',
-                'airplane_id' => 'A-500',/* $airplanes->random()->id, */
+                'plane_id' => '1',/* $airplanes->random()->id, */
                 'available' => true,
             ],
             [
@@ -34,7 +34,7 @@ class FlightSeeder extends Seeder
                 'arrival_date' => Carbon::now()->addDays(2)->addHours(3)->toDateTimeString(),
                 'origin' => 'Barcelona',
                 'destination' => 'Roma',
-                'airplane_id' => 'A-500',/* $airplanes->random()->id, */
+                'plane_id' => '2',/* $airplanes->random()->id, */
                 'available' => true,
             ],
             [
@@ -42,7 +42,7 @@ class FlightSeeder extends Seeder
                 'arrival_date' => Carbon::now()->addDays(3)->addHours(6)->toDateTimeString(),
                 'origin' => 'Berlín',
                 'destination' => 'Londres',
-                'airplane_id' => 'A-500',/* $airplanes->random()->id, */
+                'plane_id' => '3',/* $airplanes->random()->id, */
                 'available' => true,
             ],
             [
@@ -50,7 +50,7 @@ class FlightSeeder extends Seeder
                 'arrival_date' => Carbon::now()->addDays(1)->addHours(5)->toDateTimeString(),
                 'origin' => 'Madrid',
                 'destination' => 'París',
-                'airplane_id' => 'A-500',/* $airplanes->random()->id, */
+                'plane_id' => '1',/* $airplanes->random()->id, */
                 'available' => true,
             ],
             [
@@ -58,7 +58,7 @@ class FlightSeeder extends Seeder
                 'arrival_date' => Carbon::now()->addDays(2)->addHours(3)->toDateTimeString(),
                 'origin' => 'Barcelona',
                 'destination' => 'Roma',
-                'airplane_id' => 'A-500',/* $airplanes->random()->id, */
+                'plane_id' => '2',/* $airplanes->random()->id, */
                 'available' => true,
             ],
             [
@@ -66,7 +66,7 @@ class FlightSeeder extends Seeder
                 'arrival_date' => Carbon::now()->addDays(3)->addHours(6)->toDateTimeString(),
                 'origin' => 'Berlín',
                 'destination' => 'Londres',
-                'airplane_id' => 'A-500',/* $airplanes->random()->id, */
+                'plane_id' => '3',/* $airplanes->random()->id, */
                 'available' => true,
             ],
             [
@@ -74,7 +74,7 @@ class FlightSeeder extends Seeder
                 'arrival_date' => Carbon::now()->addDays(1)->addHours(5)->toDateTimeString(),
                 'origin' => 'Madrid',
                 'destination' => 'París',
-                'airplane_id' => 'A-500',/* $airplanes->random()->id, */
+                'plane_id' => '4',/* $airplanes->random()->id, */
                 'available' => true,
             ],
             [
@@ -82,7 +82,7 @@ class FlightSeeder extends Seeder
                 'arrival_date' => Carbon::now()->addDays(2)->addHours(3)->toDateTimeString(),
                 'origin' => 'Barcelona',
                 'destination' => 'Roma',
-                'airplane_id' => 'A-500',/* $airplanes->random()->id, */
+                'plane_id' => '2',/* $airplanes->random()->id, */
                 'available' => true,
             ],
             [
@@ -90,7 +90,7 @@ class FlightSeeder extends Seeder
                 'arrival_date' => Carbon::now()->addDays(3)->addHours(6)->toDateTimeString(),
                 'origin' => 'Berlín',
                 'destination' => 'Londres',
-                'airplane_id' => 'A-500',/* $airplanes->random()->id, */
+                'plane_id' => '5',/* $airplanes->random()->id, */
                 'available' => true,
             ],
             
