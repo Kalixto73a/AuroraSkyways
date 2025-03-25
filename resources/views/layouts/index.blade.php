@@ -7,12 +7,13 @@
     <title>@yield('title', 'Santa Claus')</title>
     @vite(['resources/css/app.css'])
     <link rel="stylesheet" href="{{ asset('css/app.css')}}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="w-full no-scrollbar">
     <div>
         <x-header />
 
-        <main class="bg-black bg-fixed bg-no-repeat bg-cover">
+        <main class="bg-black bg-fixed bg-no-repeat bg-cover z-0">
             @yield('content')
             @yield('script')
         </main>

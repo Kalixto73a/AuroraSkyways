@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class IsUser
 {
@@ -13,13 +14,13 @@ class IsUser
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        if (auth('api')->user()){
+        if (Auth::check() && Auth::user()->role === 'user') {
             return $next($request);
         }
-        else {
-            return redirect()->route('home');
+        else{
+            return redirect()->route('home')->with('error', 'No tienes acceso a esta página.');
         }
     }
 }

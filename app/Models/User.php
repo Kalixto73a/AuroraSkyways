@@ -65,6 +65,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    public function getUsersByRole($role)
+    {
+        $users = User::where('role', $role)->get();  // Filtrar por rol
+        return response()->json($users);
+    }
 }
 
 

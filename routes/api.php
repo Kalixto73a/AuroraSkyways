@@ -6,19 +6,28 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsUser;
 
-Route::group([
-    'middleware' => 'api',
-    'prefix' => 'auth'
-], function ($router) {
-    Route::post('/register', [AuthController::class, 'register'])->name('register');
-    Route::post('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
-    Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth:api');
-    Route::post('/me', [AuthController::class, 'me'])->middleware('auth:api')->name('me');
-});
-Route::middleware([IsAdmin::class])->group(function () {
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register'])->name('singIn');
+    Route::post('/login', [AuthController::class, 'login'])->name('logIn');
 
+    // Solo usuarios autenticados pueden acceder a estas rutas
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
+        Route::post('/me', [AuthController::class, 'me'])->name('me');
+    });
 });
-Route::middleware([IsUser::class])->group(function () {
-    
+
+// Rutas para Administradores
+Route::middleware(['auth:api', IsAdmin::class])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return response()->json(['message' => 'Bienvenido Admin']);
+    });
+});
+
+// Rutas para Usuarios Comunes
+Route::middleware(['auth:api', IsUser::class])->group(function () {
+    Route::get('/user/profile', function () {
+        return response()->json(['message' => 'Bienvenido Usuario']);
+    });
 });
