@@ -15,4 +15,19 @@ class BookingController extends Controller
         $booking = Booking::where('user_id')->get();
         return view('bookingsView', compact('bookings'));
     }
+
+    public function store(Request $request)
+    {
+        $booking = Booking::create([
+            'user_id' => Auth::id(),
+            'flight_id' => $request->flight_id,
+            'plane_id' => $request->plane_id,
+            'seat_number' => $request->seat_number,
+            'status' => 'Activo'
+    ]);
+
+    $booking->flight->updateStatus();
+
+    return redirect()->back()->with('success', 'Reserva realizada correctamente');
+    }
 }

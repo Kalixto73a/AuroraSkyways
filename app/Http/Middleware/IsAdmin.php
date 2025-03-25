@@ -19,8 +19,10 @@ class IsAdmin
         if($user && $user->role === 'admin'){
             return $next($request);
         }
-        else {
-            return response()->json(['error' => 'Usted no es un administrador'], 403);
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Acceso denegado. Se requiere permiso de administrador.'], 403);
         }
-    }
+
+        return redirect('/login')->with('error', 'Acceso denegado. No tienes permisos de administrador.');
+        }
 }

@@ -37,17 +37,28 @@
   
           <!-- Información del vuelo -->
           <div>
-            <p class="text-sm font-bold">CAPACIDAD TOTAL: {{-- {{$flight->capacity}} --}} 150</p>
-            <p class="text-sm font-bold">CAPACIDAD RESTANTE: {{-- {{$flight->remaining_capacity}} --}}30</p>
+            <p class="text-sm font-bold">CAPACIDAD TOTAL: {{$flight->plane->max_seats}}</p>
+            <p class="text-sm font-bold">CAPACIDAD RESTANTE: {{$flight->remaining_capacity}}</p>
             <p class="text-sm">DESTINO: {{$flight->destination}}</p>
           </div>
   
           <!-- Botón reservar -->
           <div class="flex flex-col items-center text-sm font-bold">
-            <p class="pb-2">Avion Asignado: {{-- {{$flight->airplane}} --}}A-500</p>
-            <button class="bg-cyan-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-cyan-600">
-              Reservar
-            </button>
+            <p class="pb-2">Avion Asignado: {{$flight->plane->name}}</p>
+            <div class="flex space-x-4">
+              <button class="bg-cyan-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-cyan-600">
+                Reservar
+              </button>
+              @if ($flight->available == '1')
+                <button class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">
+                Activo
+                </button>
+              @else
+                <button class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600">
+                  Inactivo
+                </button>
+              @endif
+            </div>
           </div>
         </div>
         @endforeach

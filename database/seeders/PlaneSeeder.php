@@ -16,7 +16,7 @@ class PlaneSeeder extends Seeder
         $planes = [
             [
                 'name' => 'A-501 Boeing 747',
-                'max_seats' => 416,
+                'max_seats' => 3,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

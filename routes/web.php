@@ -13,8 +13,14 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 Route::get('/',[HomeViewController::class, 'index'])->name('home');
 Route::get('/flights', [FlightController::class, 'index'])->name('flights');
-Route::get('/planes', [PlanesController::class, 'index'])->name('planes')->middleware('auth');
-Route::get('/bookings', [BookingController::class, 'index'])->name('bookings')->middleware('auth');
+
+Route::middleware(['isAdmin'])->group(function () {
+    Route::get('/planes', [PlanesController::class, 'index'])->name('planes');
+});
+
+Route::middleware(['isUser'])->group(function () {
+    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings');
+});
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);

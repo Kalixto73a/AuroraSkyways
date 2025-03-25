@@ -12,4 +12,5 @@ class FlightController extends Controller
         $flights = Flight::all();
         return view('flightsView', compact('flights'));
     }
+    
 }

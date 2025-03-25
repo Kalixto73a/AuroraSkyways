@@ -12,9 +12,9 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'Test User',
+                'name' => 'Yo',
                 'email' => '12124@gmail.com',
-                'password' => bcrypt('password'),
+                'password' => bcrypt('Aa123456'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

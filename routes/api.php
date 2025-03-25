@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Http\Middleware\IsUser;
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Middleware\IsAdmin;
-use App\Http\Middleware\IsUser;
+use App\Http\Controllers\Api\BookingController;
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('singIn');
@@ -25,9 +26,8 @@ Route::middleware(['auth:api', IsAdmin::class])->group(function () {
     });
 });
 
-// Rutas para Usuarios Comunes
-Route::middleware(['auth:api', IsUser::class])->group(function () {
-    Route::get('/user/profile', function () {
-        return response()->json(['message' => 'Bienvenido Usuario']);
-    });
-});
+Route::get('/bookings', [BookingController::class, 'all'])->name('allBookings')->middleware('isUser');
+Route::post('/bookings', [BookingController::class, 'store'])->name('createBooking')->middleware('isUser');
+Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookingShow')->middleware('isUser');
+Route::put('/bookings/{id}', [BookingController::class, 'update'])->name('bookingUpdate')->middleware('isUser');
+Route::delete('/bookings/{id}', [BookingController::class, 'destroy'])->name('bookingDelete')->middleware('isUser');

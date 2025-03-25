@@ -35,7 +35,7 @@ class FlightSeeder extends Seeder
                 'origin' => 'Barcelona',
                 'destination' => 'Roma',
                 'plane_id' => '2',/* $airplanes->random()->id, */
-                'available' => true,
+                'available' => false,
             ],
             [
                 'departure_date' => Carbon::now()->addDays(3)->toDateTimeString(),
@@ -43,7 +43,7 @@ class FlightSeeder extends Seeder
                 'origin' => 'Berlín',
                 'destination' => 'Londres',
                 'plane_id' => '3',/* $airplanes->random()->id, */
-                'available' => true,
+                'available' => false,
             ],
             [
                 'departure_date' => Carbon::now()->addDays(1)->toDateTimeString(),
