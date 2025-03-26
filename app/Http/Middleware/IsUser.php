@@ -9,14 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class IsUser
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role === 'user') {
+        if (!Auth::check()) {  // Primero verifica si hay sesión
+            return redirect('/login')->with('error', 'Debes iniciar sesión.');
+        }
+    
+        if (Auth::user()->role === 'user') {
             return $next($request);
         }
     

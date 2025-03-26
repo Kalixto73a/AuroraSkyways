@@ -11,22 +11,23 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PlanesController;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
-Route::get('/',[HomeViewController::class, 'index'])->name('home');
-Route::get('/flights', [FlightController::class, 'index'])->name('flights');
+Route::middleware(['web'])->group(function () {
+    Route::get('/', [HomeViewController::class, 'index'])->name('home');
+    Route::get('/flights', [FlightController::class, 'index'])->name('flights');
 
+    Route::middleware(['isAdmin'])->group(function () {
+        Route::get('/planes', [PlanesController::class, 'index'])->name('planes');
+    });
 
-
-Route::middleware(['isAdmin'])->group(function () {
-    Route::get('/planes', [PlanesController::class, 'index'])->name('planes');
+    Route::middleware(['isUser'])->group(function () {
+        Route::get('/bookings', [BookingController::class, 'index'])->name('bookings');
+        Route::post('/bookings', [BookingController::class, 'store'])->name('saveBookings');
+        
+    });
+    Route::post('/weblogout', [AuthController::class, 'webLogout'])->name('webLogout');
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::get('/register', [SingInController::class, 'showRegisterForm'])->name('register');
+    Route::post('/weblogin', [AuthController::class, 'webLogin'])->name('webLogin');
+    
 });
-
-Route::middleware(['isUser'])->group(function () {
-    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings');
-    Route::post('/bookings', [BookingController::class, 'store'])->name('saveBookings');
-});
-
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
-Route::get('/register',[SingInController::class, 'showRegisterForm'])->name('register');
-Route::post('/weblogin', [AuthController::class, 'webLogin'])->name('webLogin');
-Route::post('/weblogout', [AuthController::class, 'webLogout'])->name('webLogout');

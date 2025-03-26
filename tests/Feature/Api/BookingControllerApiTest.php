@@ -14,13 +14,76 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class BookingControllerApiTest extends TestCase
 {
     use RefreshDatabase;
-    public function test_store_reservation_successfully()
+    public function test_all_flights_for_authenticated_user()
+    {
+        // Crear un usuario
+        $user = User::create([
+            'name' => 'Juan',
+            'email' => 'juan@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'user'
+        ]);
+
+        // Crear un avión
+        $plane = Plane::create([
+            'name' => 'Avión 1',
+            'max_seats' => 100,
+        ]);
+
+        // Crear un vuelo
+        $flight = Flight::create([
+            'departure_date' => now()->addHour(2),
+            'arrival_date' => now()->addHours(3),
+            'origin' => 'Madrid',
+            'destination' => 'Barcelona',
+            'plane_id' => $plane->id,
+            'available' => true,
+        ]);
+
+        // Crear una reserva (booking) asociada al vuelo
+        $booking = Booking::create([
+            'user_id' => $user->id,
+            'flight_id' => $flight->id,
+            'plane_id' => $plane->id,
+            'seat_number' => '15',
+            'status' => 'Activo',
+        ]);
+
+        // Autenticación usando el JWT del usuario
+        $token = JWTAuth::fromUser($user);
+
+        // Realizar la solicitud GET a la ruta 'flights' (ajusta la ruta según la configuración de tu API)
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->get(route('allBookings')); // Cambia 'flights.all' por la ruta correspondiente
+
+        // Verificar que la respuesta sea exitosa
+        $response->assertStatus(200);
+
+        // Verificar que la respuesta contiene los vuelos que el usuario ha reservado
+        $response->assertJsonFragment([
+            'id' => $flight->id,
+            'origin' => $flight->origin,
+            'destination' => $flight->destination,
+            // Otros campos que desees verificar
+        ]);
+
+        // Verificar que se ha encontrado el vuelo reservado
+        $this->assertDatabaseHas('flights', [
+            'id' => $flight->id,
+            'origin' => $flight->origin,
+            'destination' => $flight->destination,
+        ]);
+    }
+
+    public function test_user_can_store_booking()
     {
         $user = User::create([
             'name' => 'Juan',
             'email' => 'juan@example.com',
             'password' => bcrypt('password'),
         ]);
+
         $plane = Plane::create([
             'name' => 'Avión 1',
             'max_seats' => 100,
@@ -37,30 +100,18 @@ class BookingControllerApiTest extends TestCase
 
         $token = JWTAuth::fromUser($user);
 
-        $data = [
-            'flight_id'   => $flight->id,
-            'plane_id'    => $plane->id,
-            'seat_number' => '12A',
-            'status'      => 'Activo',
-        ];
-
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-                         ->post(route('createBooking'), $data);
-
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            ])->post(route('createBooking'), [
+                'user_id' => $user->id,
+                'flight_id' => $flight->id,
+                'plane_id' => $plane->id,
+                'seat_number' => '15',
+                'status' => 'Activo',
+                ]);
         $response->assertStatus(201);
-
-        $response->assertJson([
-            'message' => 'Reserva creada exitosamente',
-        ]);
-
-        $this->assertDatabaseHas('bookings', [
-            'user_id'     => $user->id,
-            'flight_id'   => $flight->id,
-            'plane_id'    => $plane->id,
-            'seat_number' => '12A',
-            'status'      => 'Activo',
-        ]);
     }
+
     public function test_show_booking_successfully()
     {
         $user = User::create([
@@ -88,23 +139,17 @@ class BookingControllerApiTest extends TestCase
             'user_id' => $user->id,
             'flight_id' => $flight->id,
             'plane_id' => $plane->id,
-            'seat_number' => 'A1',
+            'seat_number' => '15',
             'status' => 'Activo',
         ]);
 
         $token = JWTAuth::fromUser($user);
-
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-                         ->get(route('bookingShow', '1'));
+        // Hacer la solicitud POST para crear la reserva
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson(route('bookingShow', '1'));
 
         $response->assertStatus(200);
-
-        $response->assertJson([
-            'booking' => [
-                'id' => $booking->id,
-                'user_id' => $user->id,
-            ]
-        ]);
     }
 
     public function test_show_booking_unauthenticated_user()

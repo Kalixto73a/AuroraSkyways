@@ -15,12 +15,13 @@ class BookingControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_it_displays_all_bookings()
+    public function testUserCanBookFlight()
     {
         $user = User::create([
             'name' => 'Juan',
             'email' => 'juan@example.com',
             'password' => bcrypt('password'),
+            'role' => 'user',
         ]);
         $plane = Plane::create([
             'name' => 'Avión 1',
@@ -36,7 +37,7 @@ class BookingControllerTest extends TestCase
             'available' => true,
         ]);
 
-        $booking1 = Booking::create([
+        $booking = Booking::create([
             'user_id' => $user->id,
             'flight_id' => $flight->id,
             'plane_id' => $plane->id,
@@ -44,27 +45,41 @@ class BookingControllerTest extends TestCase
             'status' => 'Activo',
         ]);
 
-        $token = JWTAuth::fromUser($user);
+        // Verificar que la reserva se ha guardado
+        $bookings = Booking::where('user_id', $user->id)->get();
 
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->get(route('bookings'));
+        $response = $this->post(route('webLogin'), [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
 
+        // Acceder a la página de reservas
+        $response = $this->get(route('bookings'));
+
+        // Verificar que la respuesta sea exitosa (200)
         $response->assertStatus(200);
 
-        $response->assertSee($booking1->seat_number); 
-
-        $response->assertViewIs('bookingsView'); 
+        // Verificar que las reservas del usuario estén presentes en la vista
+        foreach ($bookings as $booking) {
+            $response->assertSee($booking->id);
+        }
     }
+
     public function test_store_booking_and_update_flight_status()
     {
+        $user = User::create([
+            'name' => 'Juan',
+            'email' => 'juan@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'user',
+        ]);
         $plane = Plane::create([
-            'name' => 'Avión de prueba',
-            'max_seats' => 100
+            'name' => 'Avión 1',
+            'max_seats' => 100,
         ]);
 
         $flight = Flight::create([
-            'departure_date' => now()->addHours(2),
+            'departure_date' => now()->addHour(2),
             'arrival_date' => now()->addHours(3),
             'origin' => 'Madrid',
             'destination' => 'Barcelona',
@@ -72,31 +87,28 @@ class BookingControllerTest extends TestCase
             'available' => true,
         ]);
 
-        $user = User::create([
-            'name' => 'Juan',
-            'email' => 'juan@example.com',
-            'password' => bcrypt('password')
-        ]);
-
         $data = [
             'flight_id' => $flight->id,
             'plane_id' => $plane->id,
-            'seat_number' => 'A1',
+            'seat_number' => '15',
+            'status' => 'Activo',
         ];
 
-        $token = JWTAuth::fromUser($user);
+        $response = $this->post(route('webLogin'), [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
 
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->post(route('saveBookings'), $data);
+        $response = $this->post(route('saveBookings'), $data);
 
         $response->assertRedirect();
-
+        $response->assertSessionHas('success', 'Reserva realizada correctamente');
+        
         $this->assertDatabaseHas('bookings', [
             'user_id' => $user->id,
             'flight_id' => $flight->id,
             'plane_id' => $plane->id,
-            'seat_number' => 'A1',
+            'seat_number' => '15',
             'status' => 'Activo',
         ]);
 

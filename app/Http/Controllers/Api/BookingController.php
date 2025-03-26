@@ -44,6 +44,10 @@ class BookingController extends Controller
         // Obtener el usuario autenticado
         $user = JWTAuth::user(); 
 
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no autenticado'], 401);
+        }
+
         // Crear la reserva
         $booking = Booking::create([
             'user_id'   => $user->id,  // Se obtiene el ID del usuario autenticado
@@ -52,17 +56,19 @@ class BookingController extends Controller
             'seat_number' => $validatedData['seat_number'],
             'status'    => $validatedData['status'],
         ]);
-        
-        return response()->json([
-            'message' => 'Reserva creada exitosamente',
-            'booking' => $booking
-        ], 201);
+
+        return response()->json(['message' => 'Reserva creada exitosamente', 'booking' => $booking], 201);
     }
 
     public function show(Request $request, $id)
     {
         $user = JWTAuth::user();
-        
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no autenticado'], 401);
+        }
+    
+        // Buscar la reserva y verificar si pertenece al usuario autenticado
         $booking = Booking::where('id', $id)->where('user_id', $user->id)->first();
     
         if (!$booking) {

@@ -12,7 +12,7 @@ class FlightModelsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function ItCreatesAFlight()
+    public function test_ItCreatesAFlight()
     {
         $flight = Flight::create([
             'departure_date' => now(),

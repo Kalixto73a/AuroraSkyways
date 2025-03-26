@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Testing\WithFaker;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -152,7 +153,7 @@ class AuthControllerTest extends TestCase
 
         $response->assertRedirect();
 
-        $response->assertSessionHasErrors(['email' => 'El correo es incorrecto']);
+        $response->assertSessionHasErrors(['email' => 'El correo es incorrecto.']);
 
         $user2 = User::create([
             'name' => 'Juan',
@@ -168,43 +169,18 @@ class AuthControllerTest extends TestCase
 
         $response->assertRedirect();
 
-        $response->assertSessionHasErrors(['password' => 'La contraseña es incorrecta']);
+        $response->assertSessionHasErrors(['password' => 'La contraseña es incorrecta.']);
     }
-    public function test_logout_success()
+
+    public function test_logout_with_no_token()
     {
-        $user = User::create([
-            'name' => 'Juan',
-            'email' => 'existing@example.com',
-            'password' => bcrypt('password'),
-            'role' => 'user',
-        ]);
-
-        $token = JWTAuth::fromUser($user);
-
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->post(route('logout')); 
-
-        $response->assertStatus(200);
-
-        $response->assertJson([
-            'message' => 'Cierre de sesión exitoso'
-        ]);
+    
+        $response = $this->postJson(route('logout'));
+    
+        $response->assertStatus(401)
+                 ->assertJson(['error' => 'Token no proporcionado']);
     }
-    public function test_logout_with_invalid_token()
-    {
-        $fakeToken = 'fakeToken';
-
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $fakeToken,
-        ])->post(route('logout'));
-
-        $response->assertStatus(401);
-
-        $response->assertJson([
-            'error' => 'Token inválido o ya expirado'
-        ]);
-    }
+    
     public function test_logout_success_json()
     {
         $user = User::create([
@@ -217,26 +193,30 @@ class AuthControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->postJson(route('webLogout')); 
+        ])->postJson(route('logout')); 
 
         $response->assertStatus(200)
                 ->assertJson([
                     'message' => 'Cierre de sesión exitoso'
                 ]);
     }
-    public function test_logout_invalid_token_json()
+
+    public function test_logout_with_expired_token()
     {
-        $invalidToken = 'invalid-token';
+        $user = User::factory()->create();
+        $token = JWTAuth::fromUser($user);
+
+        // Forzar la expiración del token
+        JWTAuth::setToken($token)->invalidate();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $invalidToken,
-        ])->postJson(route('webLogout')); 
+            'Authorization' => "Bearer $token",
+        ])->postJson(route('logout'));
 
         $response->assertStatus(401)
-                ->assertJson([
-                    'error' => 'Token inválido o ya expirado'
-                ]);
+                ->assertJson(['error' => 'Token inválido']);
     }
+
     public function test_logout_success_redirect()
     {
         $user = User::create([
@@ -253,7 +233,7 @@ class AuthControllerTest extends TestCase
 
         $response->assertRedirect('/');
     }
-    public function test_logout_invalid_token_redirect()
+    public function test_logout_invalid_token_web_redirect()
     {
         $invalidToken = 'invalid-token';
 
@@ -284,5 +264,14 @@ class AuthControllerTest extends TestCase
 
         $newToken = $response->json()['access_token'];
         $this->assertNotEquals($token, $newToken);
+    }
+    public function test_webLogout_with_exception()
+    {
+        Auth::shouldReceive('guard')->once()->andThrow(new \Exception('Error inesperado'));
+
+        $response = $this->post(route('webLogout'));
+
+        $response->assertRedirect('/')
+                ->assertSessionHas('error', 'Error al cerrar sesión');
     }
 }

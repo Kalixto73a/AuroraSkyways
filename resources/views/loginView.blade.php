@@ -28,6 +28,6 @@
             <button type="submit" class="w-full text-white py-2 rounded-b bg-blue-700 hover:bg-blue-800 transition">Iniciar Sesión</button>
         </form>
     </div>
-</div>   
+</div>
 @endsection
 
