@@ -5,8 +5,9 @@ use App\Http\Middleware\IsUser;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\FlightsController;
 use App\Http\Controllers\Api\PlanesController;
+use App\Http\Controllers\Api\BookingController;
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('singIn');
@@ -27,6 +28,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/plane/{id}', [PlanesController::class, 'show'])->name('planeShow');
         Route::put('/plane/{id}', [PlanesController::class, 'update'])->name('planeUpdate');
         Route::delete('/plane/{id}', [PlanesController::class, 'destroy'])->name('planeDelete');
+
+        Route::post('/flights', [FlightsController::class, 'store'])->name('createFlight');
+        Route::put('/flight/{id}', [FlightsController::class, 'update'])->name('flightUpdate');
+        Route::delete('/flight/{id}', [FlightsController::class, 'destroy'])->name('flightDelete');
     });
 });
 
@@ -37,6 +42,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/booking/{id}', [BookingController::class, 'show'])->name('bookingShow');
         Route::put('/booking/{id}', [BookingController::class, 'update'])->name('bookingUpdate');
         Route::delete('/booking/{id}', [BookingController::class, 'destroy'])->name('bookingDelete');
+
+        Route::get('/flights', [FlightsController::class, 'index'])->name('allFlights');
+        Route::get('/flight/{id}', [FlightsController::class, 'show'])->name('flightShow');
     });
 });
 

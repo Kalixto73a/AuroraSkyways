@@ -45,7 +45,7 @@ class BookingControllerTest extends TestCase
             'status' => 'Activo',
         ]);
 
-        // Verificar que la reserva se ha guardado
+ 
         $bookings = Booking::where('user_id', $user->id)->get();
 
         $response = $this->post(route('webLogin'), [
@@ -53,13 +53,12 @@ class BookingControllerTest extends TestCase
             'password' => 'password',
         ]);
 
-        // Acceder a la página de reservas
+
         $response = $this->get(route('bookings'));
 
-        // Verificar que la respuesta sea exitosa (200)
+  
         $response->assertStatus(200);
 
-        // Verificar que las reservas del usuario estén presentes en la vista
         foreach ($bookings as $booking) {
             $response->assertSee($booking->id);
         }

@@ -11,7 +11,7 @@ class PlanesController extends Controller
 {
     public function index()
     {
-        $planes = Plane::with('flights.bookings.user')->get(); // Cargar los vuelos y las reservas con los usuarios
+        $planes = Plane::with('flights.bookings.user')->get();
         return view('planesView', compact('planes'));
     }   
 }

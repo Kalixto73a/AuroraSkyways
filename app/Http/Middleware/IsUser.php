@@ -11,7 +11,7 @@ class IsUser
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {  // Primero verifica si hay sesión
+        if (!Auth::check()) {
             return redirect('/login')->with('error', 'Debes iniciar sesión.');
         }
     

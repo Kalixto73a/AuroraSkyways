@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
     
-            // Relaciones (asegúrate que sean consistentes)
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('flight_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('plane_id')->constrained()->cascadeOnDelete(); // Campo requerido
+            $table->foreignId('plane_id')->constrained()->cascadeOnDelete();
             
             $table->string('seat_number');
             $table->enum('status', ['Activo', 'Inactivo'])->default('Activo');

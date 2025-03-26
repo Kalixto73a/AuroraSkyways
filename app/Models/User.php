@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -68,7 +68,7 @@ class User extends Authenticatable implements JWTSubject
     }
     public function getUsersByRole($role)
     {
-        $users = User::where('role', $role)->get();  // Filtrar por rol
+        $users = User::where('role', $role)->get();
         return response()->json($users);
     }
 }

@@ -190,7 +190,6 @@ class AuthControllerTest extends TestCase
         $user = User::factory()->create();
         $token = JWTAuth::fromUser($user);
 
-        // Forzar la expiración del token
         JWTAuth::setToken($token)->invalidate();
 
         $response = $this->withHeaders([

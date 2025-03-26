@@ -17,7 +17,7 @@ class PlanesControllerApiTest extends TestCase
 
     public function test_store_creates_plane_successfully()
     {
-        // Crear usuario admin para autenticación
+
         $user = User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
@@ -25,22 +25,19 @@ class PlanesControllerApiTest extends TestCase
             'role' => 'admin',
         ]);
 
-        // Generar un token para autenticación
+        
         $token = JWTAuth::fromUser($user);
 
-        // Datos del avión
         $planeData = [
             'name' => 'Boeing 747',
             'max_seats' => 200,
         ];
 
-        // Realizar la petición con el token
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
         ])->post(route('createPlanes'), $planeData);
 
-        // Asegurar que el avión se creó correctamente
         $response->assertStatus(201)
             ->assertJson([
                 'message' => 'Avión creado exitosamente',
@@ -50,7 +47,6 @@ class PlanesControllerApiTest extends TestCase
                 ],
             ]);
 
-        // Verificar que el avión está en la base de datos
         $this->assertDatabaseHas('planes', [
             'name' => 'Boeing 747',
             'max_seats' => 200,
@@ -58,7 +54,6 @@ class PlanesControllerApiTest extends TestCase
     }
     public function test_show_returns_plane_with_flights_and_bookings()
     {
-        // Crear usuario admin para autenticación
         $user = User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
@@ -66,16 +61,13 @@ class PlanesControllerApiTest extends TestCase
             'role' => 'admin',
         ]);
 
-        // Generar un token JWT
         $token = JWTAuth::fromUser($user);
 
-        // Crear un avión
         $plane = Plane::create([
             'name' => 'Boeing 747',
             'max_seats' => 200,
         ]);
 
-        // Crear un vuelo asociado al avión
         $flight = Flight::create([
             'departure_date' => now()->addDay(),
             'arrival_date' => now()->addDays(2),
@@ -85,7 +77,6 @@ class PlanesControllerApiTest extends TestCase
             'available' => true,
         ]);
 
-        // Crear un usuario pasajero
         $passenger = User::create([
             'name' => 'Juan Pérez',
             'email' => 'juan@example.com',
@@ -93,7 +84,6 @@ class PlanesControllerApiTest extends TestCase
             'role' => 'user',
         ]);
 
-        // Crear una reserva asociada al vuelo y al usuario
         $booking = Booking::create([
             'user_id' => $passenger->id,
             'plane_id' => $plane->id,
@@ -102,17 +92,15 @@ class PlanesControllerApiTest extends TestCase
             'status' => 'Activo',
         ]);
 
-        // Realizar la solicitud autenticada
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
         ])->get(route('planeShow', $plane->id));
 
-        // Verificar que la respuesta sea exitosa
         $response->assertJsonFragment([
             'id' => $plane->id,
             'name' => 'Boeing 747',
-            'max_seats' => (string) $plane->max_seats, // Convierte el número a string
+            'max_seats' => (string) $plane->max_seats,
         ]);
         
         $response->assertJsonPath('flights.0.bookings.0.seat_number', 'A1');
@@ -135,7 +123,7 @@ class PlanesControllerApiTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->get(route('planeShow', 999)); // ID que no existe
+        ])->get(route('planeShow', 999));
 
         $response->assertStatus(404)
             ->assertJson(['message' => 'Avión no encontrado']);
@@ -143,7 +131,7 @@ class PlanesControllerApiTest extends TestCase
 
     public function test_update_plane_successfully()
     {
-        // Crear usuario admin para autenticación
+        
         $user = User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
@@ -151,28 +139,23 @@ class PlanesControllerApiTest extends TestCase
             'role' => 'admin',
         ]);
 
-        // Generar token JWT
         $token = JWTAuth::fromUser($user);
 
-        // Crear un avión
         $plane = Plane::create([
             'name' => 'Boeing 747',
             'max_seats' => 200,
         ]);
 
-        // Datos para la actualización
         $updateData = [
             'name' => 'Airbus A380',
             'max_seats' => 300,
         ];
 
-        // Hacer la petición PUT autenticada
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
         ])->put(route('planeUpdate', $plane->id), $updateData);
 
-        // Verificar que la respuesta sea 200 OK
         $response->assertStatus(200)
             ->assertJson([
                 'message' => 'Avión actualizado exitosamente',
@@ -183,7 +166,6 @@ class PlanesControllerApiTest extends TestCase
                 ],
             ]);
 
-        // Verificar en la base de datos que los datos fueron actualizados
         $this->assertDatabaseHas('planes', [
             'id' => $plane->id,
             'name' => 'Airbus A380',
@@ -193,7 +175,6 @@ class PlanesControllerApiTest extends TestCase
 
     public function test_update_plane_not_found()
     {
-        // Crear usuario admin para autenticación
         $user = User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
@@ -201,10 +182,8 @@ class PlanesControllerApiTest extends TestCase
             'role' => 'admin',
         ]);
 
-        // Generar token JWT
         $token = JWTAuth::fromUser($user);
 
-        // Hacer la petición PUT a un ID inexistente
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
@@ -213,14 +192,12 @@ class PlanesControllerApiTest extends TestCase
             'max_seats' => 500,
         ]);
 
-        // Verificar que la respuesta sea 404
         $response->assertStatus(404)
             ->assertJson(['message' => 'Avión no encontrado']);
     }
 
     public function test_destroy_plane_successfully()
     {
-        // Crear usuario admin para autenticación
         $user = User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
@@ -228,32 +205,26 @@ class PlanesControllerApiTest extends TestCase
             'role' => 'admin',
         ]);
 
-        // Generar token JWT
         $token = JWTAuth::fromUser($user);
 
-        // Crear un avión
         $plane = Plane::create([
             'name' => 'Boeing 747',
             'max_seats' => 200,
         ]);
 
-        // Hacer la petición DELETE autenticada
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
         ])->delete(route('planeDelete', $plane->id));
 
-        // Verificar que la respuesta sea 200 OK
         $response->assertStatus(200)
             ->assertJson(['message' => 'Avión eliminado exitosamente']);
 
-        // Verificar que el avión ya no está en la base de datos
         $this->assertDatabaseMissing('planes', ['id' => $plane->id]);
     }
 
     public function test_destroy_plane_not_found()
     {
-        // Crear usuario admin para autenticación
         $user = User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
@@ -261,16 +232,13 @@ class PlanesControllerApiTest extends TestCase
             'role' => 'admin',
         ]);
 
-        // Generar token JWT
         $token = JWTAuth::fromUser($user);
 
-        // Hacer la petición DELETE a un ID inexistente
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
         ])->delete(route('planeDelete', 9999));
 
-        // Verificar que la respuesta sea 404
         $response->assertStatus(404)
             ->assertJson(['message' => 'Avión no encontrado']);
     }
