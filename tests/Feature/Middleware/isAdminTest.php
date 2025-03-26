@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class isAdminTest extends TestCase
 {
-    /* use RefreshDatabase;
+    use RefreshDatabase;
     public function test_it_allows_user_with_role_admin_to_pass()
     {
         $user = User::create([
@@ -49,7 +49,7 @@ class isAdminTest extends TestCase
     
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->get(route('allBookings'));
+        ])->get(route('allPlanes'));
  
         $response->assertStatus(200);
     } 
@@ -67,7 +67,7 @@ class isAdminTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->get(route('allBookings')); 
+        ])->get(route('allPlanes')); 
 
         $response->assertStatus(403);
 
@@ -87,8 +87,8 @@ class isAdminTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             
-        ])->get(route('allBookings')); 
+        ])->get(route('allPlanes')); 
         
         $response->assertRedirect('/login');
-    } */
+    }
 }

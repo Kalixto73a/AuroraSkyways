@@ -96,10 +96,8 @@ class AuthController extends Controller
             return redirect()->intended('/'); // 🔹 Debería redirigir aquí
         }
     
-        return back()->withErrors([
-            'email' => 'El correo es incorrecto.',
-            'password' => 'La contraseña es incorrecta.'
-        ]);
+        return back()->withErrors(['email' => 'Correo o Contraseña incorrectos']);
+
     }
 
     /* public function me()

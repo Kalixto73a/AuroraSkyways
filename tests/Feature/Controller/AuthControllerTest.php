@@ -153,23 +153,7 @@ class AuthControllerTest extends TestCase
 
         $response->assertRedirect();
 
-        $response->assertSessionHasErrors(['email' => 'El correo es incorrecto.']);
-
-        $user2 = User::create([
-            'name' => 'Juan',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password1'),
-            'role' => 'user',
-        ]);
-
-        $response = $this->post(route('webLogin'), [
-            'email' => $user2->email,
-            'password' => 'password',
-        ]);
-
-        $response->assertRedirect();
-
-        $response->assertSessionHasErrors(['password' => 'La contraseña es incorrecta.']);
+        $response->assertSessionHasErrors(['email' => 'Correo o Contraseña incorrectos']);
     }
 
     public function test_logout_with_no_token()
