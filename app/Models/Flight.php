@@ -44,10 +44,12 @@ class Flight extends Model
     $remainingCapacity = $totalSeats - $reservedSeats;
 
     if ($remainingCapacity <= 0 || Carbon::now()->greaterThanOrEqualTo($this->departure_date)) {
-        $this->bookings->status = 'Inactivo';
+        // Update all bookings to 'Inactivo'
+        $this->bookings()->update(['status' => 'Inactivo']);
         $this->available = false;
     } else {
-        $this->bookings->status = 'Activo';
+        // Update all bookings to 'Activo'
+        $this->bookings()->update(['status' => 'Activo']);
         $this->available = true;
     }
 

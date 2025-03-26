@@ -12,6 +12,7 @@ class Booking extends Pivot
     use HasFactory;
      protected $table = 'bookings';
     protected $fillable = [
+        'id',
         'user_id',
         'flight_id',
         'plane_id',

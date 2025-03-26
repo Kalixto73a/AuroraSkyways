@@ -56,28 +56,29 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // Validar las credenciales de email y contraseña
+            // Validar las credenciales de email y contraseña
         $credentials = $request->only('email', 'password');
 
         // Intentar autenticar al usuario usando JWT
-        if (JWTAuth::attempt($credentials)) {
-            // Si la solicitud es de tipo API (por ejemplo, Postman o una SPA)
-            if ($request->wantsJson()) {
-                // Obtener el usuario autenticado
-                $user = JWTAuth::user();
+        if ($token = JWTAuth::attempt($credentials)) {  
+            // Obtener el usuario autenticado
+            $user = JWTAuth::user();
 
-                // Generar el token para el usuario autenticado
-                $token = $this->respondWithToken(JWTAuth::fromUser($user));
-
-                // Responder con el token y el usuario en formato JSON
-                return response()->json([
-                    'user' => $user,
-                    'token' => $token
-                ], 200);
-            }
-            return redirect()->route('home'); // Redirigir al home (o la página principal)
+            // Responder con el token y el usuario en JSON
+            return response()->json([
+                'user' => $user,
+                'token' => $token
+            ], 200);
         }
-        // Si la autenticación falla, devolver un mensaje de error
+
+        // Si la solicitud es JSON, devolver un error 401 en JSON
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Las credenciales no coinciden con nuestros registros.'
+            ], 401);
+        }
+
+        // Si la solicitud no es JSON, redirigir con error
         return back()->withErrors(['email' => 'Las credenciales no coinciden con nuestros registros.']);
     }
 
@@ -86,18 +87,25 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (JWTAuth::attempt($credentials)) {
-            // Si el login es exitoso, redirige al usuario a la página principal
-            return redirect()->intended('/');
-        }
+            
+            $token = JWTAuth::fromUser(JWTAuth::user());
 
+            $cookie = cookie('jwt_token', $token, 60);
+
+            return redirect()->intended('/')->withCookie($cookie);
+        }
+        
         // Si las credenciales son incorrectas, volver al formulario de login con error
-        return back()->withErrors(['email' => 'Las credenciales son incorrectas']);
+        return back()->withErrors([
+            'email'=> 'El correo es incorrecto',
+            'password' => 'La contraseña es incorrecta'
+        ]);
     }
 
-    public function me()
+    /* public function me()
     {   
         return response()->json(JWTAuth::user());
-    }
+    } */
 
     public function logout()
     {
@@ -110,17 +118,32 @@ class AuthController extends Controller
             return response()->json(['error' => 'Token inválido o ya expirado'], 401);
         }
     }
-    public function weblogout()
+    public function webLogout(Request $request)
     {
         try {
+            // Obtener el token de la solicitud
             $token = JWTAuth::getToken();
-            JWTAuth::invalidate($token); // Invalidar el token
-
-            return response()->json(['message' => 'Cierre de sesión exitoso']);
+    
+            // Invalidar el token
+            JWTAuth::invalidate($token);
+    
+            // Si la solicitud es de tipo JSON, responde con el mensaje de éxito
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Cierre de sesión exitoso']);
+            }
+    
+            // Si la solicitud no es JSON (probablemente desde una solicitud web), redirige al home
+            return redirect('/')->with('message', 'Cierre de sesión exitoso');
+            
         } catch (JWTException $e) {
-            return response()->json(['error' => 'Token inválido o ya expirado'], 401);
+            // Si el token no es válido o ya ha expirado, devolver un error adecuado
+            if ($request->wantsJson()) {
+                return response()->json(['error' => 'Token inválido o ya expirado'], 401);
+            }
+    
+            // Si la solicitud no es JSON (probablemente desde una solicitud web), redirige al home con el error
+            return redirect('/')->with('error', 'Token inválido o ya expirado');
         }
-        return redirect('/');  // Redirige a la página principal después de cerrar sesión
     }
 
     public function refresh()

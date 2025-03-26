@@ -75,7 +75,7 @@
         @endguest
         @auth          
         {{-- Si el usuario SÍ ha iniciado sesión, muestra "Cerrar sesión" --}}
-        <form action="#" method="POST">
+        <form action="{{ route('register') }}" method="POST">
             @csrf
             <button type="submit" class="text-center block w-full px-4 py-2 text-sm rounded-md text-white hover:bg-gray-700">
                 Cerrar sesión

@@ -19,10 +19,11 @@ class IsUser
         if (Auth::check() && Auth::user()->role === 'user') {
             return $next($request);
         }
+    
         if ($request->expectsJson()) {
             return response()->json(['message' => 'Acceso denegado. Se requiere permiso de usuario.'], 403);
         }
-
+    
         return redirect('/login')->with('error', 'Acceso denegado. No tienes permisos de usuario.');
-        }
+    }
 }

@@ -12,7 +12,6 @@ class FlightModelsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
     public function ItCreatesAFlight()
     {
         $flight = Flight::create([

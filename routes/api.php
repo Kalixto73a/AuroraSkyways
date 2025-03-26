@@ -10,11 +10,11 @@ use App\Http\Controllers\Api\BookingController;
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('singIn');
     Route::post('/login', [AuthController::class, 'login'])->name('logIn');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
 
     // Solo usuarios autenticados pueden acceder a estas rutas
     Route::middleware('auth:api')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-        Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
         Route::post('/me', [AuthController::class, 'me'])->name('me');
     });
 });

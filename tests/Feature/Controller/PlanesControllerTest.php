@@ -1,20 +1,20 @@
 <?php
 
-namespace Tests\Feature\Controller;
+namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Plane;
 use App\Models\Flight;
-use Database\Seeders\DatabaseSeeder;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Booking;
+use Illuminate\Foundation\Testing\WithFaker;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class FlightControllerTest extends TestCase
+class PlanesControllerTest extends TestCase
 {
     use RefreshDatabase;
-    public function test_index_flights_view()
+    public function test_index_displays_planes_view_with_data()
     {
         $user = User::create([
             'name' => 'Juan',
@@ -44,11 +44,19 @@ class FlightControllerTest extends TestCase
             'status' => 'Activo',
         ]);
 
-        $response = $this->get(route('flights')); 
+        $token = JWTAuth::fromUser($user);
 
-        $response->assertStatus(200)
-                 ->assertViewIs('flightsView')
-                 ->assertViewHas('flights')
-                 ->assertSee($flight->name);
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->get(route('planes'));
+
+        $response->assertStatus(200);
+    
+        $response->assertViewIs('planesView');
+
+        $response->assertViewHas('planes', function ($planes) use ($plane) {
+            return $planes->contains($plane);
+        });
     }
+    
 }

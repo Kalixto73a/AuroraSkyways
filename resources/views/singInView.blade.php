@@ -35,7 +35,7 @@
                 <label class="block text-white">Confirmar Contraseña</label>
                 <input type="password" name="password_confirmation" required class="w-full px-4 py-2 border rounded">
             </div>
-            <button type="submit" class="w-full text-white py-2 rounded bg-blue-700 hover:bg-blue-800 transition">Ingresar</button>
+            <button type="submit" class="w-full text-white py-2 rounded bg-blue-700 hover:bg-blue-800 transition">Registrarme</button>
         </form>
     </div>
 </div>   
