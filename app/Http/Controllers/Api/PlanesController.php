@@ -11,10 +11,12 @@ class PlanesController extends Controller
 {
     public function all()
     {
-        $user = JWTAuth::user();
-
         $planes = Plane::with(['flights.bookings.user'])->get();
 
+        $planes->each(function ($plane) {
+            $plane->flights->each->makeHidden(['plane']);
+        });
+    
         return response()->json($planes, 200);
     }
 
