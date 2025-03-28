@@ -26,12 +26,42 @@ class FlightsController extends Controller
             'plane_id' => 'required|exists:planes,id',
             'available' => 'required|boolean',
         ]);
-
+    
+        // Verificar si ya existe un vuelo con el mismo avión y fechas
+        $existingFlight = Flight::where('plane_id', $validatedData['plane_id'])
+            ->where('departure_date', $validatedData['departure_date'])
+            ->where('arrival_date', $validatedData['arrival_date'])
+            ->exists();
+    
+        if ($existingFlight) {
+            return response()->json([
+                'error' => 'Ya existe un vuelo con el mismo avión y las mismas fechas.'
+            ], 422);
+        }
+        if ($validatedData['available'] == 0){
+            return response()->json([
+                'error' => 'No puedes crear un vuelo que no este activo'
+            ], 422);
+        }
         $flight = Flight::create($validatedData);
+
+        $formattedFlight = [
+            'id' => $flight->id,
+            'remaining_capacity' => $flight->remaining_capacity,
+            'departure_date' => $flight->departure_date,
+            'arrival_date' => $flight->arrival_date,
+            'origin' => $flight->origin,
+            'destination' => $flight->destination,
+            'plane_id' => $flight->plane_id,
+            'available' => $flight->available,
+            'updated_at' => $flight->updated_at,
+            'created_at' => $flight->created_at,
+            'plane' => $flight->plane
+        ];
 
         return response()->json([
             'message' => 'Vuelo creado exitosamente',
-            'flight' => $flight
+            'flight' => $formattedFlight
         ], 201);
     }
 
