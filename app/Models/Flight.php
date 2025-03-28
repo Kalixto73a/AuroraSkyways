@@ -21,12 +21,12 @@ class Flight extends Model
 
     public function plane()
     {
-    return $this->belongsTo(Plane::class, 'plane_id');
+    return $this->belongsTo(Plane::class,  'plane_id');
     }
 
     public function bookings()
     {
-        return $this->hasMany(Booking::class, 'flight_id');
+        return $this->hasMany(Booking::class);
     }
 
     protected $appends = ['remaining_capacity'];

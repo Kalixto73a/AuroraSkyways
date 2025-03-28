@@ -15,16 +15,18 @@ class Booking extends Pivot
         'id',
         'user_id',
         'flight_id',
-        'plane_id',
         'seat_number',
         'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }   
+
     public function flight()
     {
         return $this->belongsTo(Flight::class);
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+
 }

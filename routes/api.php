@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['isUser'])->group(function () {
-        Route::get('/bookings', [BookingController::class, 'all'])->name('allBookings');
+        Route::get('/bookings', [BookingController::class, 'all'])->name('allBookingsFromUser');
         Route::post('/bookings', [BookingController::class, 'store'])->name('createBooking');
         Route::get('/booking/{id}', [BookingController::class, 'show'])->name('bookingShow');
         Route::put('/booking/{id}', [BookingController::class, 'update'])->name('bookingUpdate');

@@ -18,7 +18,6 @@ class BookingSeeder extends Seeder
             [
                 'user_id' => 1,
                 'flight_id' => 1,
-                'plane_id' => 1,
                 'seat_number' => 12,
                 'status' => 'Activo',
                 'created_at' => now(),
@@ -27,7 +26,6 @@ class BookingSeeder extends Seeder
             [
                 'user_id' => 4,
                 'flight_id' => 1,
-                'plane_id' => 2,
                 'seat_number' => 15,
                 'status' => 'Activo',
                 'created_at' => now(),
@@ -36,7 +34,6 @@ class BookingSeeder extends Seeder
             [
                 'user_id' => 3,
                 'flight_id' => 1,
-                'plane_id' => 3,
                 'seat_number' => 5,
                 'status' => 'Inactivo',
                 'created_at' => now(),
@@ -45,7 +42,6 @@ class BookingSeeder extends Seeder
             [
                 'user_id' => 2,
                 'flight_id' => 1,
-                'plane_id' => 4,
                 'seat_number' => 20,
                 'status' => 'Activo',
                 'created_at' => now(),

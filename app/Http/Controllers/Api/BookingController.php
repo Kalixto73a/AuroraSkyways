@@ -32,7 +32,6 @@ class BookingController extends Controller
     {
         $validatedData = $request->validate([
             'flight_id' => 'required|exists:flights,id',
-            'plane_id'  => 'required|exists:planes,id',
             'seat_number' => 'required',
             'status'    => 'required|in:Activo',
         ]);
@@ -42,16 +41,27 @@ class BookingController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Usuario no autenticado'], 401);
         }
+        
+        $existingBooking = Booking::where('user_id', $user->id)
+        ->where('flight_id', $validatedData['flight_id'])
+        ->first();
 
+        if ($existingBooking) {
+            return response()->json(['message' => 'Ya tienes una reserva en este vuelo'], 400);
+        }
+        
         $booking = Booking::create([
             'user_id'   => $user->id,
             'flight_id' => $validatedData['flight_id'],
-            'plane_id'  => $validatedData['plane_id'],
             'seat_number' => $validatedData['seat_number'],
             'status'    => $validatedData['status'],
         ]);
 
-        return response()->json(['message' => 'Reserva creada exitosamente', 'booking' => $booking], 201);
+        $lastBookingFromUser = Booking::where('user_id', $user->id)
+        ->latest('created_at')
+        ->first();
+
+        return response()->json(['message' => 'Reserva creada exitosamente', 'booking_id' => $lastBookingFromUser->id, 'booking' => $booking], 201);
     }
 
     public function show(Request $request, $id)
