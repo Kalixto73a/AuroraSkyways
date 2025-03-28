@@ -17,7 +17,6 @@ Route::prefix('auth')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
         Route::post('/me', [AuthController::class, 'me'])->name('me');
-        
     });
 });
 
@@ -42,10 +41,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/booking/{id}', [BookingController::class, 'show'])->name('bookingShow');
         Route::put('/booking/{id}', [BookingController::class, 'update'])->name('bookingUpdate');
         Route::delete('/booking/{id}', [BookingController::class, 'destroy'])->name('bookingDelete');
-
-        Route::get('/flights', [FlightsController::class, 'index'])->name('allFlights');
-        Route::get('/flight/{id}', [FlightsController::class, 'show'])->name('flightShow');
     });
 });
 
+Route::get('/flights', [FlightsController::class, 'index'])->name('allFlights');
+Route::get('/flight/{id}', [FlightsController::class, 'show'])->name('flightShow');
 
