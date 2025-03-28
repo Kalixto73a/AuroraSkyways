@@ -89,10 +89,10 @@ class AuthController extends Controller
 
     }
 
-    /* public function me()
+    public function me()
     {   
         return response()->json(JWTAuth::user());
-    } */
+    }
 
     public function logout(Request $request)
     {
