@@ -66,11 +66,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    public function getUsersByRole($role)
+/*     public function getUsersByRole($role)
     {
         $users = User::where('role', $role)->get();
         return response()->json($users);
-    }
+    } */
 
     public function bookings() {
         return $this->hasMany(Booking::class);
