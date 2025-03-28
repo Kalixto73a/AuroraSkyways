@@ -29,30 +29,26 @@ class Flight extends Model
         return $this->hasMany(Booking::class, 'flight_id');
     }
 
+    protected $appends = ['remaining_capacity'];
+
     public function getRemainingCapacityAttribute()
     {
-
-    $reservedSeats = $this->bookings()->where('status', 'Activo')->count();
-    return $this->plane->max_seats - $reservedSeats;
-
+        return $this->plane ? $this->plane->max_seats - $this->bookings()->where('status', 'Activo')->count() : 0;
     }
+
     
     public function updateStatus()
     {
-    $totalSeats = $this->plane->max_seats;
-    $reservedSeats = $this->bookings()->where('status', 'Activo')->count();
-    $remainingCapacity = $totalSeats - $reservedSeats;
-
-    if ($remainingCapacity <= 0 || Carbon::now()->greaterThanOrEqualTo($this->departure_date)) {
-        
-        $this->bookings()->update(['status' => 'Inactivo']);
-        $this->available = false;
-    } else {
-        
-        $this->bookings()->update(['status' => 'Activo']);
-        $this->available = true;
-    }
-
-    $this->save();
+        $reservedSeats = $this->bookings()->where('status', 'Activo')->count();
+        $remainingCapacity = $this->plane->max_seats - $reservedSeats;
+    
+        // Si no quedan asientos o la fecha de salida ya pasó, marcar como inactivo
+        if ($remainingCapacity <= 0 || now()->greaterThanOrEqualTo($this->departure_date)) {
+            $this->available = false;
+        } else {
+            $this->available = true;
+        }
+    
+        $this->save();
     }
 }
