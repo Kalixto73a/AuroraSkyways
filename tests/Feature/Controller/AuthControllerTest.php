@@ -92,6 +92,32 @@ class AuthControllerTest extends TestCase
                 ]);
     }
 
+    public function test_successful_me()
+    {
+        $user = User::create([
+            'name' => 'Juan',
+            'email' => 'existing@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'admin',
+        ]);
+        
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson(route('me')); 
+
+        $response->assertJson([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'email_verified_at' => $user->email_verified_at,
+            'role' => $user->role,
+            'created_at' => $user->created_at->toJson(),
+            'updated_at' => $user->updated_at->toJson()
+        ]);
+    }
+
     public function test_failed_login()
     {
         $response = $this->withHeaders([
@@ -234,6 +260,7 @@ class AuthControllerTest extends TestCase
             'password' => bcrypt('password'),
             'role' => 'user',
         ]);
+
         $token = JWTAuth::fromUser($user);
 
         $response = $this->withHeaders([
