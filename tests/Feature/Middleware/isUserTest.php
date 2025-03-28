@@ -74,7 +74,7 @@ class isUserTest extends TestCase
 
         $response->assertJson(['message' => 'Acceso denegado. Se requiere permiso de usuario.']);
     }
-    public function test_access_redirect_for_admin_or_non_user_role()
+    public function test_access_redirect_for_admin_role()
     {
         $user = User::create([
             'name' => 'Raul',
@@ -91,5 +91,12 @@ class isUserTest extends TestCase
         ])->get(route('allBookingsFromUser')); 
         
         $response->assertRedirect('/login');
+    }
+    public function test_access_redirect_for_non_user_role()
+    {
+        $response = $this->get(route('bookings')); 
+
+        $response->assertRedirect('/login');
+
     }
 }
