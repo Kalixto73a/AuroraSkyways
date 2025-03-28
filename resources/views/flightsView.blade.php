@@ -2,22 +2,31 @@
 @section('content')
 <div class="relative h-screen bg-black flex justify-center items-center font-[K2D]">
 
-    <img 
-      src="https://res.cloudinary.com/dzfqdntdw/image/upload/v1738684129/imagen_2025-02-04_164846399_zowfpl.png" 
-      alt="Avión en el cielo" 
-      class="absolute inset-0 w-full h-full object-cover opacity-50"
-    />
+  <img 
+    src="https://res.cloudinary.com/dzfqdntdw/image/upload/v1738684129/imagen_2025-02-04_164846399_zowfpl.png" 
+    alt="Avión en el cielo" 
+    class="absolute inset-0 w-full h-full object-cover opacity-50"
+  />
 
-    <div class="relative z-10 w-11/12 max-w-4xl bg-white/90 rounded-xl shadow-lg max-h-[30rem] overflow-y-scroll no-scrollbar">
-      
-      <div class="flex justify-between items-center bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-t-xl p-4 sticky top-0">
-        <button class="bg-white text-cyan-500 font-bold py-2 px-4 rounded-full shadow-md hover:scale-110 transition transition-transform duration-500">Actuales</button>
-        <h1 class="text-2xl font-bold">VUELOS</h1>
-        <button class="bg-white text-cyan-500 font-bold py-2 px-4 rounded-full shadow-md hover:scale-110 transition transition-transform duration-500">Antiguos</button>
-      </div>
-  
-      <div class="p-4 space-y-4">
-        @foreach ($flights as $flight)
+  <div class="relative z-10 w-11/12 max-w-4xl bg-white/90 rounded-xl shadow-lg max-h-[30rem] overflow-y-scroll no-scrollbar">
+    
+    <!-- HEADER -->
+    <div class="flex justify-between items-center bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-t-xl p-4 sticky top-0">
+      <button onclick="filterFlights(1)" 
+              class="bg-white text-cyan-500 font-bold py-2 px-4 rounded-full shadow-md hover:scale-110 transition-transform duration-500">
+        Actuales
+      </button>
+      <h1 class="text-2xl font-bold">VUELOS</h1>
+      <button onclick="filterFlights(0)" 
+              class="bg-white text-cyan-500 font-bold py-2 px-4 rounded-full shadow-md hover:scale-110 transition-transform duration-500">
+        Antiguos
+      </button>
+    </div>
+
+    <!-- LISTADO DE VUELOS -->
+    <div class="p-4 space-y-4" id="flight-list">
+      @foreach ($flights as $flight)
+      <div class="flight-item" data-available="{{ $flight->available }}">
         <div class="flex items-center justify-between bg-white rounded-lg shadow-md p-4">
           
           <div class="flex items-center space-x-4">
@@ -32,22 +41,30 @@
               <p class="text-sm">ORIGEN: {{$flight->origin}}</p>
             </div>
           </div>
-  
+
           <div>
             <p class="text-sm font-bold">CAPACIDAD TOTAL: {{$flight->plane->max_seats}}</p>
             <p class="text-sm font-bold">CAPACIDAD RESTANTE: {{$flight->remaining_capacity}}</p>
             <p class="text-sm">DESTINO: {{$flight->destination}}</p>
           </div>
-  
+
           <div class="flex flex-col items-center text-sm font-bold">
-            <p class="pb-2">Avion Asignado: {{$flight->plane->name}}</p>
+            <p class="pb-2">Avión Asignado: {{$flight->plane->name}}</p>
             <div class="flex space-x-4">
-              <button class="bg-cyan-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-cyan-600">
-                Reservar
-              </button>
-              @if ($flight->available == '1')
+              @if (auth()->check() && auth()->user()->role === 'user')
+                <button class="bg-cyan-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-cyan-600">
+                  Reservar
+                </button>
+              @else
+                <a href={{route("login")}}>
+                  <button class="bg-cyan-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-cyan-600">
+                    Reservar
+                  </button>
+                </a>
+              @endif
+              @if ($flight->available == 1)
                 <button class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">
-                Activo
+                  Activo
                 </button>
               @else
                 <button class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600">
@@ -57,8 +74,24 @@
             </div>
           </div>
         </div>
-        @endforeach
       </div>
+      @endforeach
     </div>
-  </div>  
+  </div>
+</div>  
+<script>
+function filterFlights(availableStatus) {
+  let flights = document.querySelectorAll(".flight-item");
+
+  flights.forEach(flight => {
+    let isAvailable = flight.getAttribute("data-available") == availableStatus;
+    flight.style.display = isAvailable ? "block" : "none";
+  });
+}
+
+// Mostrar solo los vuelos disponibles al cargar la página
+window.onload = function() {
+  filterFlights(1);
+};
+</script>
 @endsection
