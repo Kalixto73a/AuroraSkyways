@@ -50,7 +50,7 @@ class isUserTest extends TestCase
     
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->get(route('allBookings'));
+        ])->get(route('allBookingsFromUser'));
  
         $response->assertStatus(200);
     } 
@@ -68,7 +68,7 @@ class isUserTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->get(route('allBookings')); 
+        ])->get(route('allBookingsFromUser')); 
 
         $response->assertStatus(403);
 
@@ -88,7 +88,7 @@ class isUserTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             
-        ])->get(route('allBookings')); 
+        ])->get(route('allBookingsFromUser')); 
         
         $response->assertRedirect('/login');
     }

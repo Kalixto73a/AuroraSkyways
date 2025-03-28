@@ -106,7 +106,6 @@ class BookingControllerTest extends TestCase
         $this->assertDatabaseHas('bookings', [
             'user_id' => $user->id,
             'flight_id' => $flight->id,
-            'plane_id' => $plane->id,
             'seat_number' => '15',
             'status' => 'Activo',
         ]);

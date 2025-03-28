@@ -55,7 +55,7 @@ class BookingControllerApiTest extends TestCase
         
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->get(route('allBookings')); 
+        ])->get(route('allBookingsFromUser')); 
 
         
         $response->assertStatus(200);
@@ -184,7 +184,6 @@ class BookingControllerApiTest extends TestCase
             'id' => '1',
             'user_id' => $user1->id,
             'flight_id' => $flight->id,
-            'plane_id' => $plane->id,
             'seat_number' => 'A1',
             'status' => 'Activo',
         ]);
@@ -216,9 +215,9 @@ class BookingControllerApiTest extends TestCase
         $flight = Flight::create([
             'departure_date' => now()->addHour(),
             'arrival_date' => now()->addHours(2),
+            'plane_id' => $plane->id,
             'origin' => 'Madrid',
             'destination' => 'Barcelona',
-            'plane_id' => $plane->id,
             'available' => true,
         ]);
 
@@ -226,7 +225,6 @@ class BookingControllerApiTest extends TestCase
             'id' => '1',
             'user_id' => $user->id,
             'flight_id' => $flight->id,
-            'plane_id' => $plane->id,
             'seat_number' => 'A1',
             'status' => 'Activo',
         ]);
@@ -291,9 +289,9 @@ class BookingControllerApiTest extends TestCase
         $flight = Flight::create([
             'departure_date' => now()->addHour(),
             'arrival_date' => now()->addHours(2),
+            'plane_id' => $plane->id,
             'origin' => 'Madrid',
             'destination' => 'Barcelona',
-            'plane_id' => $plane->id,
             'available' => true,
         ]);
 
@@ -301,7 +299,6 @@ class BookingControllerApiTest extends TestCase
             'id' => '1',
             'user_id' => $user->id,
             'flight_id' => $flight->id,
-            'plane_id' => $plane->id,
             'seat_number' => 'A1',
             'status' => 'Activo',
         ]);
@@ -349,9 +346,9 @@ class BookingControllerApiTest extends TestCase
         $flight = Flight::create([
             'departure_date' => now()->addHour(),
             'arrival_date' => now()->addHours(2),
+            'plane_id' => $plane->id,
             'origin' => 'Madrid',
             'destination' => 'Barcelona',
-            'plane_id' => $plane->id,
             'available' => true,
         ]);
 
@@ -359,7 +356,6 @@ class BookingControllerApiTest extends TestCase
             'id' => '1',
             'user_id' => $user1->id,
             'flight_id' => $flight->id,
-            'plane_id' => $plane->id,
             'seat_number' => 'A1',
             'status' => 'Activo',
         ]);

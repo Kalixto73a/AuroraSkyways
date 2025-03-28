@@ -38,7 +38,6 @@ class BookingModelsTest extends TestCase
         $booking = Booking::create([
             'user_id' => $user->id,
             'flight_id' => $flight->id,
-            'plane_id' => $flight->plane_id,
             'seat_number' => 'A1',
             'status' => 'Activo'
         ]);
@@ -46,7 +45,6 @@ class BookingModelsTest extends TestCase
         $this->assertDatabaseHas('bookings', [
             'user_id' => $user->id,
             'flight_id' => $flight->id,
-            'plane_id' => $flight->plane_id,
             'seat_number' => 'A1',
             'status' => 'Activo'
         ]);
@@ -81,7 +79,6 @@ class BookingModelsTest extends TestCase
         $booking = Booking::create([
             'user_id' => $user->id,
             'flight_id' => $flight->id,
-            'plane_id' => $flight->plane_id,
             'seat_number' => 'B2',
             'status' => 'Activo'
         ]);
@@ -89,7 +86,6 @@ class BookingModelsTest extends TestCase
         $this->assertDatabaseHas('bookings', [
             'user_id' => $user->id,
             'flight_id' => $flight->id,
-            'plane_id' => $flight->plane_id,
             'seat_number' => 'B2',
             'status' => 'Activo'
             ]);
