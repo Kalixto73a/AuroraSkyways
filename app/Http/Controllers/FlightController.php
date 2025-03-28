@@ -7,10 +7,18 @@ use Illuminate\Http\Request;
 
 class FlightController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $flights = Flight::all();
+
+        $flights = Flight::with('plane')->get()
+                                        ->sortByDesc('departure_date');
+        
+        foreach ($flights as $flight) {
+            $flight->updateStatus();
+        }
+
         return view('flightsView', compact('flights'));
     }
+    
     
 }
