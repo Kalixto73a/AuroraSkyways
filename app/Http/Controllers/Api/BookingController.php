@@ -37,10 +37,6 @@ class BookingController extends Controller
         ]);
 
         $user = JWTAuth::user(); 
-
-        if (!$user) {
-            return response()->json(['message' => 'Usuario no autenticado'], 401);
-        }
         
         $existingBooking = Booking::where('user_id', $user->id)
         ->where('flight_id', $validatedData['flight_id'])
@@ -67,10 +63,6 @@ class BookingController extends Controller
     public function show(Request $request, $id)
     {
         $user = JWTAuth::user();
-
-        if (!$user) {
-            return response()->json(['message' => 'Usuario no autenticado'], 401);
-        }
     
         $booking = Booking::where('id', $id)->where('user_id', $user->id)->first();
     

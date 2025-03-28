@@ -75,6 +75,24 @@ class BookingControllerApiTest extends TestCase
         ]);
     }
 
+    public function test_error_user_dont_have_bookings()
+    {
+        $user = User::create([
+            'name' => 'Juan',
+            'email' => 'juan@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'user'
+        ]);
+
+        $token = JWTAuth::fromuser($user);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->get(route('allBookingsFromUser')); 
+
+        $response->assertJson(['message' => 'No hay vuelos reservados'], 404);
+    }
+
     public function test_user_can_store_booking()
     {
         $user = User::create([
@@ -110,7 +128,49 @@ class BookingControllerApiTest extends TestCase
                 ]);
         $response->assertStatus(201);
     }
+    public function test_user_cant_store_2_or_more_bookings_for_the_same_flight()
+    {
+        $user = User::create([
+            'name' => 'Juan',
+            'email' => 'juan@example.com',
+            'password' => bcrypt('password'),
+        ]);
 
+        $plane = Plane::create([
+            'name' => 'Avión 1',
+            'max_seats' => 100,
+        ]);
+
+        $flight = Flight::create([
+            'departure_date' => now()->addHour(),
+            'arrival_date' => now()->addHours(2),
+            'origin' => 'Madrid',
+            'destination' => 'Barcelona',
+            'plane_id' => $plane->id,
+            'available' => true,
+        ]);
+
+        $booking = Booking::create([
+            'user_id' => $user->id,
+            'flight_id' => $flight->id,
+            'plane_id' => $plane->id,
+            'seat_number' => '15',
+            'status' => 'Activo',
+        ]);
+
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            ])->post(route('createBooking'), [
+                'user_id' => $user->id,
+                'flight_id' => $flight->id,
+                'plane_id' => $plane->id,
+                'seat_number' => '15',
+                'status' => 'Activo',
+                ]);
+        $response->assertJson(['message' => 'Ya tienes una reserva en este vuelo'], 400);
+    }
     public function test_show_booking_successfully()
     {
         $user = User::create([
@@ -150,7 +210,7 @@ class BookingControllerApiTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_show_booking_unauthenticated_user()
+    public function test_show_booking_with_no_booking_or_other_user_booking()
     {
         $user1 = User::create([
             'name' => 'Juan',
@@ -194,7 +254,6 @@ class BookingControllerApiTest extends TestCase
                          ->getJson(route('bookingShow','1'));
                          
         $response->assertJson([
-            'message' => 'Acceso denegado. Se requiere permiso de usuario',
             'message' => 'Reserva no encontrada o no autorizada'
         ], 403);
     }
